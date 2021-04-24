@@ -906,7 +906,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1516692999}
+      - m_Target: {fileID: 1028758956}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1606,6 +1606,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   ScrollSmoothing: 0.97
   TargetSizeDelay: 0.383
+  CenteringSpeed: 0.0206
   AlphaSpeed: 0.2
 --- !u!1 &2068356667
 GameObject:
