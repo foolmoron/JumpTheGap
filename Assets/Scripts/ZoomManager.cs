@@ -51,7 +51,8 @@ public class ZoomManager : Manager<ZoomManager> {
             ZoomCamera.orthographicSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
         }
         // Figure out current zoom level
-        ZoomConfig currentZoom = ZoomConfigs.Find(config => config.MaxCameraSize >= ZoomCamera.orthographicSize);
+        var currentZoomIndex = ZoomConfigs.IndexOf(ZoomCamera, (config, cam) => config.MaxCameraSize >= cam.orthographicSize);
+        var currentZoom = ZoomConfigs[currentZoomIndex];
         // Move camera
         {
             if (currentZoom.CanMove) {
@@ -91,8 +92,9 @@ public class ZoomManager : Manager<ZoomManager> {
         }
         // Enable current zoom group
         {
-            foreach (var zoom in ZoomConfigs) {
-                var enabled = zoom == currentZoom;
+            for (var i = 0; i < ZoomConfigs.Length; i++) {
+                var enabled = i >= currentZoomIndex;
+                var zoom = ZoomConfigs[i];
                 zoom.Group.alpha = Mathf.Lerp(zoom.Group.alpha, enabled ? 1 : 0, AlphaSpeed);
                 zoom.Group.interactable = enabled;
                 zoom.Group.blocksRaycasts = enabled;

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1916403432}
   - component: {fileID: 1916403431}
+  - component: {fileID: 4730068879217521651}
   m_Layer: 0
   m_Name: flag
   m_TagString: Untagged
@@ -83,6 +84,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &4730068879217521651
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916403430}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.22242904, y: 0.13568783}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5, y: 1.5}
+    newSize: {x: 1.5, y: 1.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5174432, y: 1.7713757}
+  m_EdgeRadius: 0
 --- !u!1 &399358807322908127
 GameObject:
   m_ObjectHideFlags: 0
@@ -6057,7 +6084,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9079009022484551411}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.36, y: -6.33, z: 0}
+  m_LocalPosition: {x: 0.05, y: 15.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4721563325488647595}
@@ -6076,7 +6103,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.2868266, y: 6.300133}
+  m_Offset: {x: 0, y: -15.3}
   m_SpriteTilingProperty:
     border: {x: 0.56, y: 0.51, z: 0.55, w: 0.61}
     pivot: {x: 0.5, y: 0.5}
@@ -6139,6 +6166,14 @@ PrefabInstance:
     - target: {fileID: 3914382399264081515, guid: 1b34ab29057f2c24aa0d23455c65be10, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6069423712731353705, guid: 1b34ab29057f2c24aa0d23455c65be10, type: 3}
+      propertyPath: JumpKey
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6069423712731353705, guid: 1b34ab29057f2c24aa0d23455c65be10, type: 3}
+      propertyPath: JumpMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6330577588011322271, guid: 1b34ab29057f2c24aa0d23455c65be10, type: 3}
       propertyPath: m_Name

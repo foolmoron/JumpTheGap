@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 3914382399264081515}
   - component: {fileID: 7611952871914634592}
   - component: {fileID: 3423456816159825196}
+  - component: {fileID: 6069423712731353705}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -180,10 +181,10 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 6
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d4e8c4870e57a2d4aac0f2bae0a10e4e, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -214,3 +215,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.8920971, y: 2.017672}
   m_EdgeRadius: 0
+--- !u!114 &6069423712731353705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6330577588011322271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7c1e712b6344d9b26b762e904d3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 60
+  LeftMoveMode: 0
+  LeftKey: 0
+  RightMoveMode: 0
+  RightKey: 0
+  JumpForce: 28
+  JumpMultiplier: 1
+  JumpMode: 0
+  JumpKey: 0
+  OnGroundTime: 0.25
