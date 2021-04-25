@@ -27,6 +27,8 @@ public class Player : MonoBehaviour {
     public float OnGroundTime = 0.25f;
     float onGroundTime;
 
+    public Vector2 DieBounds = new Vector2(22.5f, 14.0f);
+
     Animator animator;
     new Rigidbody2D rigidbody2D;
 
@@ -45,12 +47,15 @@ public class Player : MonoBehaviour {
         }
         // Move
         {
-            Vector2 force = Input.GetKey(LeftKey)
+            var force = Input.GetKey(LeftKey)
                 ? GetForce(LeftMoveMode)
                 : Input.GetKey(RightKey)
                     ? GetForce(RightMoveMode)
                     : Vector2.zero
                 ;
+            if (!GameManager.Inst.CanControlPlayer) {
+                force = Vector2.zero;
+            }
             rigidbody2D.AddForce(force, ForceMode2D.Force);
             if (isOnGround) {
                 animator.Play(force.x == 0
@@ -68,9 +73,22 @@ public class Player : MonoBehaviour {
         }
         // Jump
         {
-            if (isOnGround && Input.GetKey(JumpKey)) {
-                DoJump(JumpMode);
-                isOnGround = false;
+            if (GameManager.Inst.CanControlPlayer) {
+                if (isOnGround && Input.GetKey(JumpKey)) {
+                    DoJump(JumpMode);
+                    isOnGround = false;
+                }
+            }
+        }
+        // Die
+        {
+            if (
+                transform.position.x >= DieBounds.x/2 ||
+                transform.position.x <= -DieBounds.x/2 ||
+                transform.position.y >= DieBounds.y/2 ||
+                transform.position.y <= -DieBounds.y/2
+            ) {
+                GameManager.Inst.Die();
             }
         }
     }
@@ -79,6 +97,12 @@ public class Player : MonoBehaviour {
         if (other.gameObject.transform.position.y < transform.position.y) {
             isOnGround = true;
             onGroundTime = OnGroundTime;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Flag") {
+            GameManager.Inst.TouchedFlag();
         }
     }
 
@@ -98,7 +122,7 @@ public class Player : MonoBehaviour {
     public void DoJump(JumpModes mode) {
         switch (mode) {
             case JumpModes.Die:
-                Debug.LogError("TODO: DIE");
+                GameManager.Inst.Die();
                 break;
             case JumpModes.Jump:
                 rigidbody2D.velocity = rigidbody2D.velocity.withY(JumpForce);

@@ -11,6 +11,7 @@ public class ZoomManager : Manager<ZoomManager> {
         public float TargetCameraSize;
         public CanvasGroup Group;
         public bool CanMove;
+        public bool CanControlPlayer;
     }
 
     public ZoomConfig[] ZoomConfigs = Enumerable.Range(0, 7).Select(x => new ZoomConfig()).ToArray();
@@ -57,6 +58,7 @@ public class ZoomManager : Manager<ZoomManager> {
         // Figure out current zoom level
         var currentZoomIndex = ZoomConfigs.IndexOf(ZoomCamera, (config, cam) => config.MaxCameraSize >= cam.orthographicSize);
         var currentZoom = ZoomConfigs[currentZoomIndex];
+        GameManager.Inst.CanControlPlayer = currentZoom.CanControlPlayer;
         // Move camera
         {
             if (currentZoom.CanMove) {
