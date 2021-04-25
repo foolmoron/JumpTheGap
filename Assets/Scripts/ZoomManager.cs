@@ -30,12 +30,16 @@ public class ZoomManager : Manager<ZoomManager> {
     [Range(0, 0.5f)]
     public float AlphaSpeed = 0.2f;
 
+    bool canPan;
     Vector2 prevMouse;
 
     void Awake() {
         ZoomCamera = ZoomCamera == null ? Camera.main : ZoomCamera;
         desiredSize = ZoomCamera.orthographicSize;
     }
+
+    public void CanPanEnable() => canPan = true;
+    public void CanPanDisable() => canPan = false;
 
     void Update() {
         var scrolled = Input.mouseScrollDelta.y != 0;
@@ -56,7 +60,7 @@ public class ZoomManager : Manager<ZoomManager> {
         // Move camera
         {
             if (currentZoom.CanMove) {
-                if (Input.GetMouseButton(0)) {
+                if (canPan && Input.GetMouseButton(0)) {
                     var prevPoint = ZoomCamera.ScreenToWorldPoint(prevMouse);
                     var newPoint = ZoomCamera.ScreenToWorldPoint(Input.mousePosition);
                     ZoomCamera.transform.Translate(prevPoint - newPoint);
