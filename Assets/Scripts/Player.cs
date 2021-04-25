@@ -53,7 +53,7 @@ public class Player : MonoBehaviour {
                     ? GetForce(RightMoveMode)
                     : Vector2.zero
                 ;
-            if (!GameManager.Inst.CanControlPlayer) {
+            if (!GameManager.Inst.CanControlPlayer || !GameManager.Inst.CanControlPlayer2) {
                 force = Vector2.zero;
             }
             rigidbody2D.AddForce(force, ForceMode2D.Force);
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
         }
         // Jump
         {
-            if (GameManager.Inst.CanControlPlayer) {
+            if (GameManager.Inst.CanControlPlayer && GameManager.Inst.CanControlPlayer2) {
                 if (isOnGround && Input.GetKey(JumpKey)) {
                     DoJump(JumpMode);
                     isOnGround = false;

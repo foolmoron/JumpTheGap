@@ -13,6 +13,7 @@ public class GameManager : Manager<GameManager> {
     public bool FlagAction;
 
     public bool CanControlPlayer;
+    public bool CanControlPlayer2;
 
     public float DieTime = 2f;
 
@@ -32,7 +33,21 @@ public class GameManager : Manager<GameManager> {
 
     public TMP_Text LabelTime;
 
+
+    public bool Has48;
+    public bool Has48b;
+    public bool Using48Level;
     public bool HasUpdate;
+    public GameObject VersionNeedsUpdate;
+    public GameObject CompNeedsUpdate;
+    public GameObject VersionBroken;
+
+    [System.Serializable]
+    public class SceneConfig {
+        public bool Requires48;
+        public GameObject[] ObjectsToDisable;
+    }
+    public SceneConfig[] SceneConfigs;
 
     void Awake() {
         Load(0);
@@ -48,6 +63,11 @@ public class GameManager : Manager<GameManager> {
         var minsCurrent = (int)(GameTime/60);
         var secsCurrent = (int)(GameTime%60);
         LabelTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
+
+        VersionBroken.SetActive(HasUpdate && Has48b);
+        CompNeedsUpdate.SetActive(!VersionBroken.activeSelf && Has48 && !HasUpdate);
+        VersionNeedsUpdate.SetActive(!Has48 && Using48Level);
+        CanControlPlayer2 = !VersionBroken.activeSelf && !CompNeedsUpdate.activeSelf && !VersionNeedsUpdate.activeSelf;
     }
 
     public void LevelNext() {
@@ -146,5 +166,40 @@ public class GameManager : Manager<GameManager> {
         WinScreen.SetActive(true);
 
         yield return null;
+    }
+
+    public void SetVersion(int version) {
+        switch(version) {
+            case 0:
+                Has48 = false;
+                Has48b = false;
+                break;
+            case 1:
+                Has48 = false;
+                Has48b = false;
+                break;
+            case 2:
+                Has48 = true;
+                Has48b = true;
+                break;
+            case 3:
+                Has48 = true;
+                Has48b = false;
+                break;
+            case 4:
+                Has48 = true;
+                Has48b = true;
+                break;
+        }
+    }
+
+    public void SetScene(int scene) {
+        foreach (var conf in SceneConfigs) {
+            conf.ObjectsToDisable.ForEach(o => o.SetActive(true));
+        }
+        var config = SceneConfigs[scene];
+        config.ObjectsToDisable.ForEach(o => o.SetActive(false));
+        GameManager.Inst.Using48Level = config.Requires48;
+        Load(0);
     }
 }
