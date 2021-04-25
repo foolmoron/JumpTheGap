@@ -12,6 +12,7 @@ public class ZoomManager : Manager<ZoomManager> {
         public CanvasGroup Group;
         public bool CanMove;
         public bool CanControlPlayer;
+        public bool IsMainLevel;
     }
 
     public ZoomConfig[] ZoomConfigs = Enumerable.Range(0, 7).Select(x => new ZoomConfig()).ToArray();
@@ -30,6 +31,10 @@ public class ZoomManager : Manager<ZoomManager> {
     public Vector2 PanBoundsWidthHeight = new Vector2(23.5f, 15.33f);
     [Range(0, 0.5f)]
     public float AlphaSpeed = 0.2f;
+
+    Vector2? desiredPos;
+    [Range(0, 0.5f)]
+    public float ZoomPanSpeed = 0.1f;
 
     bool canPan;
     Vector2 prevMouse;
@@ -51,7 +56,10 @@ public class ZoomManager : Manager<ZoomManager> {
                 desiredSize -= Input.mouseScrollDelta.y * scrollAmount;
 
                 var mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+                var vecToMouse = ZoomCamera.transform.position - mousePoint;
+                var dirToMouse = -Mathf.Sign(Input.mouseScrollDelta.y) * vecToMouse * 0.15f;
+                desiredPos = desiredPos ?? ZoomCamera.transform.position;
+                desiredPos += dirToMouse;
             }
             ZoomCamera.orthographicSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
         }
@@ -62,12 +70,25 @@ public class ZoomManager : Manager<ZoomManager> {
         // Move camera
         {
             if (currentZoom.CanMove) {
-                if (canPan && Input.GetMouseButton(0)) {
-                    var prevPoint = ZoomCamera.ScreenToWorldPoint(prevMouse);
-                    var newPoint = ZoomCamera.ScreenToWorldPoint(Input.mousePosition);
-                    ZoomCamera.transform.Translate(prevPoint - newPoint);
+                if (canPan) {
+                    if (Input.GetMouseButton(0)) {
+                        var prevPoint = ZoomCamera.ScreenToWorldPoint(prevMouse);
+                        var newPoint = ZoomCamera.ScreenToWorldPoint(Input.mousePosition);
+                        ZoomCamera.transform.Translate(prevPoint - newPoint);
+                        desiredPos = null;
+                    }
                 }
-
+            } else {
+                ZoomCamera.transform.position = Vector2.Lerp(ZoomCamera.transform.position, Vector2.zero, CenteringSpeed).to3(ZoomCamera.transform.position.z);
+            }
+            var isMainZoomingIn = currentZoom.IsMainLevel && ZoomCamera.orthographicSize < currentZoom.TargetCameraSize;
+            if (!currentZoom.CanMove && !isMainZoomingIn) {
+                desiredPos = null;
+            }
+            if (desiredPos.HasValue) {
+                ZoomCamera.transform.position = Vector2.Lerp(ZoomCamera.transform.position, desiredPos.Value, ZoomPanSpeed).to3(ZoomCamera.transform.position.z);
+            }
+            if (currentZoom.CanMove || isMainZoomingIn) {
                 var aspect = (float)Screen.width / (float)Screen.height;
                 var camHeight = ZoomCamera.orthographicSize * 2;
                 var camWidth = camHeight * aspect;
@@ -87,8 +108,6 @@ public class ZoomManager : Manager<ZoomManager> {
                 if (maxY > PanBoundsWidthHeight.y/2) {
                     ZoomCamera.transform.Translate(new Vector2(0, PanBoundsWidthHeight.y/2 - maxY));
                 }
-            } else {
-                ZoomCamera.transform.position = Vector2.Lerp(ZoomCamera.transform.position, Vector2.zero, CenteringSpeed).to3(ZoomCamera.transform.position.z);
             }
         }
         // Limit camera
@@ -116,6 +135,7 @@ public class ZoomManager : Manager<ZoomManager> {
                 targetSizeDelay -= Time.deltaTime;
                 if (targetSizeDelay <= 0) {
                     desiredSize = currentZoom.TargetCameraSize;
+                    desiredPos = null;
                 }
             }
         }

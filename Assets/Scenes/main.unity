@@ -2826,36 +2826,43 @@ MonoBehaviour:
     Group: {fileID: 656243913}
     CanMove: 1
     CanControlPlayer: 0
+    IsMainLevel: 0
   - MaxCameraSize: 2.9
     TargetCameraSize: 2
     Group: {fileID: 420359848}
     CanMove: 1
     CanControlPlayer: 0
+    IsMainLevel: 0
   - MaxCameraSize: 5.1
     TargetCameraSize: 4.5
     Group: {fileID: 1225491797}
     CanMove: 1
     CanControlPlayer: 0
+    IsMainLevel: 0
   - MaxCameraSize: 10.8
     TargetCameraSize: 7.68
     Group: {fileID: 591133724}
     CanMove: 0
     CanControlPlayer: 1
+    IsMainLevel: 1
   - MaxCameraSize: 16
     TargetCameraSize: 15.4
     Group: {fileID: 2136428310}
     CanMove: 0
     CanControlPlayer: 0
+    IsMainLevel: 0
   - MaxCameraSize: 21
     TargetCameraSize: 18.32
     Group: {fileID: 236492563}
     CanMove: 0
     CanControlPlayer: 0
+    IsMainLevel: 0
   - MaxCameraSize: 26
     TargetCameraSize: 26
     Group: {fileID: 1418216532}
     CanMove: 0
     CanControlPlayer: 0
+    IsMainLevel: 0
   ZoomCamera: {fileID: 0}
   MinCameraSize: 0.5
   ScrollAmount:
@@ -2914,6 +2921,7 @@ MonoBehaviour:
   CenteringSpeed: 0.0206
   PanBoundsWidthHeight: {x: 23.5, y: 15.33}
   AlphaSpeed: 0.2
+  ZoomPanSpeed: 0.057
 --- !u!1 &2136428308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,11 +3063,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 647608638072103614, guid: f79af98de01777246947df9270db3310, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 9.453
+      value: 9.728
       objectReference: {fileID: 0}
     - target: {fileID: 647608638072103614, guid: f79af98de01777246947df9270db3310, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.208
+      value: 0.419
       objectReference: {fileID: 0}
     - target: {fileID: 647608638072103614, guid: f79af98de01777246947df9270db3310, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
