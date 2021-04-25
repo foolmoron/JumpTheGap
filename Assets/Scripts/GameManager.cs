@@ -30,6 +30,10 @@ public class GameManager : Manager<GameManager> {
     public TMP_Text TextCurrentTime;
     public TMP_Text TextBestTime;
 
+    public TMP_Text LabelTime;
+
+    public bool HasUpdate;
+
     void Awake() {
         Load(0);
     }
@@ -40,6 +44,10 @@ public class GameManager : Manager<GameManager> {
             Load(CurrentLevel);
         }
         prevCurrentLevel = CurrentLevel;
+
+        var minsCurrent = (int)(GameTime/60);
+        var secsCurrent = (int)(GameTime%60);
+        LabelTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
     }
 
     public void LevelNext() {
@@ -124,7 +132,7 @@ public class GameManager : Manager<GameManager> {
 
         var minsCurrent = (int)(GameTime/60);
         var secsCurrent = (int)(GameTime%60);
-        TextCurrentTime.text = minsCurrent + ":" + secsBest.ToString("0#");
+        TextCurrentTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
 
         TextMessage.text = GameTime > 120
             ? "Oh hey, you finally jumped the gap! Something must have really gone wrong to take this long..."
