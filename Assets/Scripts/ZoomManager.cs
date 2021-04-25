@@ -99,9 +99,10 @@ public class ZoomManager : Manager<ZoomManager> {
         // Enable current zoom group
         {
             for (var i = 0; i < ZoomConfigs.Length; i++) {
-                var enabled = i >= currentZoomIndex;
+                var enabled = i == currentZoomIndex;
+                var over = i >= currentZoomIndex;
                 var zoom = ZoomConfigs[i];
-                zoom.Group.alpha = Mathf.Lerp(zoom.Group.alpha, enabled ? 1 : 0, AlphaSpeed);
+                zoom.Group.alpha = Mathf.Lerp(zoom.Group.alpha, enabled ? 1 : over ? 0.35f : 0, AlphaSpeed);
                 zoom.Group.interactable = enabled;
                 zoom.Group.blocksRaycasts = enabled;
             }

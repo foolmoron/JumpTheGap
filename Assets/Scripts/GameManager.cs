@@ -10,6 +10,7 @@ public class GameManager : Manager<GameManager> {
         Win
     }
     public FlagModes FlagMode = FlagModes.Die;
+    public bool FlagAction;
 
     public bool CanControlPlayer;
 
@@ -49,6 +50,14 @@ public class GameManager : Manager<GameManager> {
         CurrentLevel = (CurrentLevel - 1 + Levels.Length) % Levels.Length;
     }
 
+    public void SetFlagMode(int mode) {
+        FlagMode = (FlagModes) mode;
+    }
+
+    public void SetFlagAction(bool toggle) {
+        FlagAction = toggle;
+    }
+
     public void Load(int level) {
         StopAllCoroutines();
         StartCoroutine(DoLoad(level));
@@ -84,6 +93,9 @@ public class GameManager : Manager<GameManager> {
     }
 
     public void TouchedFlag() {
+        if (!FlagAction) {
+            return;
+        }
         switch (FlagMode) {
             case FlagModes.Die:
                 Die();
