@@ -22,8 +22,6 @@ public class GameManager : Manager<GameManager> {
     public float LoadTime = 1.2f;
     public GameObject LoadScreen;
     public Level[] Levels;
-    public int CurrentLevel;
-    int prevCurrentLevel;
 
     public float GameTime;
 
@@ -71,8 +69,6 @@ public class GameManager : Manager<GameManager> {
     public Player player;
 
     void Awake() {
-        Load(0);
-
         massSlider = MassSlider.GetComponentInChildren<Slider>();
         massDropdown = MassSlider.GetComponentInChildren<TMP_Dropdown>();
         gravSlider = GravSlider.GetComponentInChildren<Slider>();
@@ -85,10 +81,6 @@ public class GameManager : Manager<GameManager> {
 
     void Update() {
         GameTime += Time.deltaTime;
-        if (CurrentLevel != prevCurrentLevel) {
-            Load(CurrentLevel);
-        }
-        prevCurrentLevel = CurrentLevel;
 
         var minsCurrent = (int)(GameTime/60);
         var secsCurrent = (int)(GameTime%60);
@@ -110,14 +102,6 @@ public class GameManager : Manager<GameManager> {
         }
     }
 
-    public void LevelNext() {
-        CurrentLevel = (CurrentLevel + 1) % Levels.Length;
-    }
-
-    public void LevelPrev() {
-        CurrentLevel = (CurrentLevel - 1 + Levels.Length) % Levels.Length;
-    }
-
     public void SetFlagMode(int mode) {
         FlagMode = (FlagModes) mode;
     }
@@ -126,17 +110,18 @@ public class GameManager : Manager<GameManager> {
         FlagAction = toggle;
     }
 
-    public void Load(int level) {
+    public void Load() {
         StopAllCoroutines();
-        StartCoroutine(DoLoad(level));
+        StartCoroutine(DoLoad());
     }
 
-    IEnumerator DoLoad(int level) {
+    IEnumerator DoLoad() {
         LoadScreen.SetActive(true);
+        AudioManager.Inst.PlaySound("static");
         Levels.ForEach(l => l.gameObject.SetActive(false));
         yield return new WaitForSeconds(LoadTime);
-        Levels[level].gameObject.SetActive(true);
-        Levels[level].Setup();
+        Levels[0].gameObject.SetActive(true);
+        Levels[0].Setup();
         LoadScreen.SetActive(false);
     }
 
@@ -156,8 +141,9 @@ public class GameManager : Manager<GameManager> {
         var player = FindObjectOfType<Player>();
         player.GetComponentInChildren<Animator>().Play("Die");
         DisableControls();
+        AudioManager.Inst.PlaySound("die");
         yield return new WaitForSeconds(DieTime);
-        yield return DoLoad(CurrentLevel);
+        yield return DoLoad();
     }
 
     public void TouchedFlag() {
@@ -181,6 +167,7 @@ public class GameManager : Manager<GameManager> {
 
     IEnumerator DoWin() {
         DisableControls();
+        AudioManager.Inst.PlaySound("win");
 
         var prevBest = PlayerPrefs.GetFloat("BestTime", float.PositiveInfinity);
         var newBest = Mathf.Min(GameTime, prevBest);
@@ -194,12 +181,12 @@ public class GameManager : Manager<GameManager> {
         var secsCurrent = (int)(GameTime%60);
         TextCurrentTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
 
-        TextMessage.text = GameTime > 120
+        TextMessage.text = GameTime > 180
             ? "Oh hey, you finally jumped the gap! Something must have really gone wrong to take this long..."
-            : GameTime > 30
+            : GameTime > 60
                 ? "Phew, you jumped the gap! What took you so long?!"
-                : GameTime > 5
-                    ? "You jumped the gap! A little slow for a tutorial level, but I'll take it."
+                : GameTime > 8
+                    ? "You jumped the gap! A bit slow for a simple tutorial level, but I'll take it."
                     : "Congratulations, you jumped the gap in a reasonable amount of time!"
                     ;
 
@@ -240,6 +227,6 @@ public class GameManager : Manager<GameManager> {
         var config = SceneConfigs[scene];
         config.ObjectsToDisable.ForEach(o => o.SetActive(false));
         GameManager.Inst.Using48Level = config.Requires48;
-        Load(0);
+        Load();
     }
 }

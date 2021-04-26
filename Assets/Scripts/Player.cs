@@ -64,6 +64,7 @@ public class Player : MonoBehaviour {
             } else {
                 animator.Play("Jump");
             }
+            AudioManager.Inst.PlaySteps = isOnGround && force.x != 0;
             if (force.x > 0) {
                 animator.transform.localScale = animator.transform.localScale.withX(1);
             } else if (force.x < 0) {
@@ -167,6 +168,7 @@ public class Player : MonoBehaviour {
                 break;
             case JumpModes.Jump:
                 rigidbody2D.velocity = rigidbody2D.velocity.withY(JumpForce);
+                AudioManager.Inst.PlaySound("jump");
                 break;
         }
     }

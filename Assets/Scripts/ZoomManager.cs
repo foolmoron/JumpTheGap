@@ -40,6 +40,8 @@ public class ZoomManager : Manager<ZoomManager> {
     bool canPan;
     Vector2 prevMouse;
 
+    public AnimationCurve SizeToPitch;
+
     void Awake() {
         ZoomCamera = ZoomCamera == null ? Camera.main : ZoomCamera;
         desiredSize = ZoomCamera.orthographicSize;
@@ -62,9 +64,13 @@ public class ZoomManager : Manager<ZoomManager> {
                 desiredPos = desiredPos ?? ZoomCamera.transform.position;
                 desiredPos += dirToMouse;
             }
-            ZoomCamera.orthographicSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
+            var newSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
+            AudioManager.Inst.VolumeScroll = Mathf.Clamp01(200 * Mathf.Abs(ZoomCamera.orthographicSize - newSize));
+            AudioManager.Inst.PitchScroll = SizeToPitch.Evaluate(newSize);
+            ZoomCamera.orthographicSize = newSize;
         }
         // Figure out current zoom level
+        ZoomCamera.orthographicSize = Mathf.Clamp(ZoomCamera.orthographicSize, MinCameraSize, ZoomConfigs.Last().MaxCameraSize);
         var currentZoomIndex = ZoomConfigs.IndexOf(ZoomCamera, (config, cam) => config.MaxCameraSize >= cam.orthographicSize);
         var currentZoom = ZoomConfigs[currentZoomIndex];
         GameManager.Inst.CanControlPlayer = currentZoom.CanControlPlayer;
