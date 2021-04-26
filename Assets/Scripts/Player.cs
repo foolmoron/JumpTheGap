@@ -11,7 +11,6 @@ public class Player : MonoBehaviour {
         Die, Jump
     }
 
-
     public float MoveSpeed = 5;
     public MoveModes LeftMoveMode;
     public KeyCode LeftKey = KeyCode.None;
@@ -91,6 +90,48 @@ public class Player : MonoBehaviour {
                 GameManager.Inst.Die();
             }
         }
+    }
+
+    public void SetJumpMode(int mode) {
+        JumpMode = (JumpModes) mode;
+    }
+
+    public void SetLeftMode(int mode) {
+        LeftMoveMode = (MoveModes) mode;
+    }
+
+    public void SetRightMode(int mode) {
+        RightMoveMode = (MoveModes) mode;
+    }
+
+    void setKey(ref KeyCode key, int index) {
+        if (index == 1) {
+            key = KeyCode.A;
+        } else if (index == 2) {
+            key = KeyCode.Space;
+        } else if (index == 4) {
+            key = KeyCode.LeftArrow;
+        } else if (index == 5) {
+            key = KeyCode.D;
+        } else if (index == 8) {
+            key = KeyCode.RightArrow;
+        } else if (index == 9) {
+            key = KeyCode.R;
+        } else {
+            key = KeyCode.None;
+        }
+    }
+
+    public void SetJumpKey(int index) {
+        setKey(ref JumpKey, index);
+    }
+
+    public void SetLeftKey(int index) {
+        setKey(ref LeftKey, index);
+    }
+
+    public void SetRightKey(int index) {
+        setKey(ref RightKey, index);
     }
 
     void OnCollisionStay2D(Collision2D other) {
