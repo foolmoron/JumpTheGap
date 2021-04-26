@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Manager<GameManager> {
 
@@ -49,8 +50,37 @@ public class GameManager : Manager<GameManager> {
     }
     public SceneConfig[] SceneConfigs;
 
+    public GameObject MassSlider;
+    Slider massSlider;
+    TMP_Dropdown massDropdown;
+    public GameObject GravSlider;
+    Slider gravSlider;
+    TMP_Dropdown gravDropdown;
+    public GameObject JumpSlider;
+    Slider jumpSlider;
+    TMP_Dropdown jumpDropdown;
+    public GameObject TimeSlider;
+    Slider timeSlider;
+    TMP_Dropdown timeDropdown;
+
+    static readonly float[] MASS = { 10, 30, 1, 0.1f };
+    static readonly float[] GRAV = { 1, 0.001f };
+    static readonly float[] JUMP = { 0.1f, 5, 30, 1 };
+    static readonly float[] TIME = { 1, 0.001f };
+
+    public Player player;
+
     void Awake() {
         Load(0);
+
+        massSlider = MassSlider.GetComponentInChildren<Slider>();
+        massDropdown = MassSlider.GetComponentInChildren<TMP_Dropdown>();
+        gravSlider = GravSlider.GetComponentInChildren<Slider>();
+        gravDropdown = GravSlider.GetComponentInChildren<TMP_Dropdown>();
+        jumpSlider = JumpSlider.GetComponentInChildren<Slider>();
+        jumpDropdown = JumpSlider.GetComponentInChildren<TMP_Dropdown>();
+        timeSlider = TimeSlider.GetComponentInChildren<Slider>();
+        timeDropdown = TimeSlider.GetComponentInChildren<TMP_Dropdown>();
     }
 
     void Update() {
@@ -64,10 +94,20 @@ public class GameManager : Manager<GameManager> {
         var secsCurrent = (int)(GameTime%60);
         LabelTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
 
-        VersionBroken.SetActive(HasUpdate && Has48b);
-        CompNeedsUpdate.SetActive(!VersionBroken.activeSelf && Has48 && !HasUpdate);
-        VersionNeedsUpdate.SetActive(!Has48 && Using48Level);
-        CanControlPlayer2 = !VersionBroken.activeSelf && !CompNeedsUpdate.activeSelf && !VersionNeedsUpdate.activeSelf;
+        // Warnings
+        {
+            VersionBroken.SetActive(HasUpdate && Has48b);
+            CompNeedsUpdate.SetActive(!VersionBroken.activeSelf && Has48 && !HasUpdate);
+            VersionNeedsUpdate.SetActive(!Has48 && Using48Level);
+            CanControlPlayer2 = !VersionBroken.activeSelf && !CompNeedsUpdate.activeSelf && !VersionNeedsUpdate.activeSelf;
+        }
+        // Settings
+        {
+            player.GetComponent<Rigidbody2D>().mass = Mathf.Lerp(0.3f, 1.5f, massSlider.value) * MASS[massDropdown.value];
+            Physics2D.gravity = Physics2D.gravity.withY(Mathf.Lerp(-25f, -250f, gravSlider.value) * GRAV[gravDropdown.value]);
+            player.JumpForce = Mathf.Lerp(5, 40, jumpSlider.value) * JUMP[jumpDropdown.value];
+            Time.timeScale = Mathf.Lerp(0.7f, 1.5f, timeSlider.value) * TIME[timeDropdown.value];
+        }
     }
 
     public void LevelNext() {
