@@ -146,6 +146,13 @@ public class ZoomManager : Manager<ZoomManager> {
                 }
             }
         }
+        // Shortcuts to zoom
+        {
+            var nextIndex = currentZoomIndex + (Input.GetKeyDown(KeyCode.UpArrow) ? -1 : Input.GetKeyDown(KeyCode.DownArrow) ? 1 : 0);
+            if (nextIndex != currentZoomIndex && nextIndex >= 0 && nextIndex < ZoomConfigs.Length) {
+                desiredSize = ZoomConfigs[nextIndex].TargetCameraSize;
+            }
+        }
         // Stuff
         prevMouse = Input.mousePosition;
     }
