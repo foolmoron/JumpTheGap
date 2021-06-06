@@ -100,6 +100,12 @@ public class GameManager : Manager<GameManager> {
             player.JumpForce = Mathf.Lerp(5, 40, jumpSlider.value) * JUMP[jumpDropdown.value];
             Time.timeScale = Mathf.Lerp(0.7f, 1.5f, timeSlider.value) * TIME[timeDropdown.value];
         }
+        // Mute
+        {
+            if (Input.GetKeyDown(KeyCode.M)) {
+                AudioListener.volume = AudioListener.volume > 0.1f ? 0 : 1;
+            }
+        }
     }
 
     public void SetFlagMode(int mode) {
