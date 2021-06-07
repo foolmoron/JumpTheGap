@@ -187,12 +187,12 @@ public class GameManager : Manager<GameManager> {
         var secsCurrent = (int)(GameTime%60);
         TextCurrentTime.text = minsCurrent + ":" + secsCurrent.ToString("0#");
 
-        TextMessage.text = GameTime > 180
-            ? "Oh hey, you finally jumped the gap! Something must have really gone wrong to take this long..."
-            : GameTime > 60
-                ? "Phew, you jumped the gap! What took you so long?!"
+        TextMessage.text = GameTime > 300
+            ? "Phew, you finally jumped the gap! Something must have really gone wrong to take this long..."
+            : GameTime > 90
+                ? "Oh hey, you jumped the gap! What took you so long?!"
                 : GameTime > 8
-                    ? "You jumped the gap! A bit slow for a simple tutorial level, but I'll take it."
+                    ? "You jumped the gap! Kinda slow for a tutorial level, but I won't judge."
                     : "Congratulations, you jumped the gap in a reasonable amount of time!"
                     ;
 
