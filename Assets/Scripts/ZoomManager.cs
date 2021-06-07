@@ -56,7 +56,7 @@ public class ZoomManager : Manager<ZoomManager> {
             }
 
             var newSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
-            AudioManager.Inst.VolumeScroll = Mathf.Clamp01(200 * Mathf.Abs(ZoomCamera.orthographicSize - newSize));
+            AudioManager.Inst.VolumeScroll = Mathf.Clamp01(200 * Mathf.Abs(ZoomCamera.orthographicSize - newSize)) * 0.4f;
             AudioManager.Inst.PitchScroll = SizeToPitch.Evaluate(newSize);
             ZoomCamera.orthographicSize = newSize;
         }
