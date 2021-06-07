@@ -21,6 +21,7 @@ public class ZoomManager : Manager<ZoomManager> {
     public Camera ZoomCamera;
     public float MinCameraSize;
     public AnimationCurve ScrollAmount = AnimationCurve.Linear(0, 1, 0, 1);
+    public float ScrollFactor = 1;
     [Range(0.75f, 0.99f)]
     public float ScrollSmoothing = 0.95f;
     float desiredSize;
@@ -46,13 +47,14 @@ public class ZoomManager : Manager<ZoomManager> {
     }
 
     void Update() {
-        var scrolled = Input.mouseScrollDelta.y != 0;
+        var scrollDir = Input.mouseScrollDelta.y == 0 ? 0 : Mathf.Sign(Input.mouseScrollDelta.y);
+        Debug.Log($"{Input.mouseScrollDelta.y} / {scrollDir}");
         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // Zoom camera
         {
-            if (scrolled) {
+            if (scrollDir != 0) {
                 var scrollAmount = ScrollAmount.Evaluate(desiredSize);
-                desiredSize -= Input.mouseScrollDelta.y * scrollAmount;
+                desiredSize -= scrollDir * ScrollFactor * scrollAmount;
             }
 
             var newSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
@@ -124,7 +126,7 @@ public class ZoomManager : Manager<ZoomManager> {
         }
         // Target size when resting
         {
-            if (scrolled) {
+            if (scrollDir != 0) {
                 targetSizeDelay = TargetSizeDelay;
             }
             if (targetSizeDelay > 0) {
