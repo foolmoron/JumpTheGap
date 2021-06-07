@@ -24,7 +24,7 @@ public class ZoomManager : Manager<ZoomManager> {
     [Range(0.75f, 0.99f)]
     public float ScrollSmoothing = 0.95f;
     float desiredSize;
-    [Range(0, 0.5f)]
+    [Range(0, 1f)]
     public float TargetSizeDelay = 0.15f;
     float targetSizeDelay;
     [Range(0, 0.1f)]
@@ -33,11 +33,9 @@ public class ZoomManager : Manager<ZoomManager> {
     [Range(0, 0.5f)]
     public float AlphaSpeed = 0.2f;
 
-    Vector2? desiredPos;
     [Range(0, 0.5f)]
     public float ZoomPanSpeed = 0.1f;
 
-    bool canPan;
     Vector2 prevMouse;
 
     public AnimationCurve SizeToPitch;
@@ -47,23 +45,16 @@ public class ZoomManager : Manager<ZoomManager> {
         desiredSize = ZoomCamera.orthographicSize;
     }
 
-    public void CanPanEnable() => canPan = true;
-    public void CanPanDisable() => canPan = false;
-
     void Update() {
         var scrolled = Input.mouseScrollDelta.y != 0;
+        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // Zoom camera
         {
             if (scrolled) {
                 var scrollAmount = ScrollAmount.Evaluate(desiredSize);
                 desiredSize -= Input.mouseScrollDelta.y * scrollAmount;
-
-                var mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                var vecToMouse = ZoomCamera.transform.position - mousePoint;
-                var dirToMouse = -Mathf.Sign(Input.mouseScrollDelta.y) * vecToMouse * 0.15f;
-                desiredPos = desiredPos ?? ZoomCamera.transform.position;
-                desiredPos += dirToMouse;
             }
+
             var newSize = Mathf.Lerp(ZoomCamera.orthographicSize, desiredSize, 1 - ScrollSmoothing);
             AudioManager.Inst.VolumeScroll = Mathf.Clamp01(200 * Mathf.Abs(ZoomCamera.orthographicSize - newSize));
             AudioManager.Inst.PitchScroll = SizeToPitch.Evaluate(newSize);
@@ -76,26 +67,24 @@ public class ZoomManager : Manager<ZoomManager> {
         GameManager.Inst.CanControlPlayer = currentZoom.CanControlPlayer;
         // Move camera
         {
+            var isMainZoomingIn = currentZoom.IsMainLevel && ZoomCamera.orthographicSize < currentZoom.TargetCameraSize;
             if (currentZoom.CanMove) {
-                if (canPan) {
+                if (GameManager.Inst.CanControlPlayer2) {
                     if (Input.GetMouseButton(0)) {
                         var prevPoint = ZoomCamera.ScreenToWorldPoint(prevMouse);
                         var newPoint = ZoomCamera.ScreenToWorldPoint(Input.mousePosition);
                         ZoomCamera.transform.Translate(prevPoint - newPoint);
-                        desiredPos = null;
                     }
                 }
             } else {
                 ZoomCamera.transform.position = Vector2.Lerp(ZoomCamera.transform.position, Vector2.zero, CenteringSpeed).to3(ZoomCamera.transform.position.z);
             }
-            var isMainZoomingIn = currentZoom.IsMainLevel && ZoomCamera.orthographicSize < currentZoom.TargetCameraSize;
-            if (!currentZoom.CanMove && !isMainZoomingIn) {
-                desiredPos = null;
-            }
-            if (desiredPos.HasValue) {
-                ZoomCamera.transform.position = Vector2.Lerp(ZoomCamera.transform.position, desiredPos.Value, ZoomPanSpeed).to3(ZoomCamera.transform.position.z);
-            }
             if (currentZoom.CanMove || isMainZoomingIn) {
+                if (!Input.GetMouseButton(0)) {
+                    var newMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    ZoomCamera.transform.Translate(mousePos - newMousePos);
+                }
+
                 var aspect = (float)Screen.width / (float)Screen.height;
                 var camHeight = ZoomCamera.orthographicSize * 2;
                 var camWidth = camHeight * aspect;
@@ -142,7 +131,6 @@ public class ZoomManager : Manager<ZoomManager> {
                 targetSizeDelay -= Time.deltaTime;
                 if (targetSizeDelay <= 0) {
                     desiredSize = currentZoom.TargetCameraSize;
-                    desiredPos = null;
                 }
             }
         }
