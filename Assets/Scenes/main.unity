@@ -2092,6 +2092,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6451341744761109563, guid: 1819e00ec2a52ed49b32a82f74c0ae40, type: 3}
   m_PrefabInstance: {fileID: 320259762}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &336521827 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8441596635814312121, guid: eeb2eb1c0455b4a4fb52d806aa76698e, type: 3}
+  m_PrefabInstance: {fileID: 3180450471254381980}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &368304287
 GameObject:
   m_ObjectHideFlags: 0
@@ -6509,6 +6514,8 @@ MonoBehaviour:
     ObjectsToDisable:
     - {fileID: 3431766390491916890}
     - {fileID: 1000341760}
+    - {fileID: 336521827}
+    - {fileID: 1742048056}
     - {fileID: 434607719425584980}
     - {fileID: 8349939387138593260}
     - {fileID: 7785595722209662894}
@@ -6517,6 +6524,8 @@ MonoBehaviour:
     ObjectsToDisable:
     - {fileID: 3431766390491916890}
     - {fileID: 1000341760}
+    - {fileID: 1742048056}
+    - {fileID: 336521827}
     - {fileID: 434607719425584980}
     - {fileID: 7785595722209662894}
     - {fileID: 3371396690041306122}
@@ -6525,6 +6534,8 @@ MonoBehaviour:
     ObjectsToDisable:
     - {fileID: 3431766390491916890}
     - {fileID: 1000341760}
+    - {fileID: 336521827}
+    - {fileID: 1742048056}
     - {fileID: 434607719425584980}
     - {fileID: 8349939387138593260}
     - {fileID: 3371396690041306122}
@@ -6546,6 +6557,8 @@ MonoBehaviour:
     ObjectsToDisable:
     - {fileID: 3431766390491916890}
     - {fileID: 1000341760}
+    - {fileID: 336521827}
+    - {fileID: 1742048056}
     - {fileID: 434607719425584980}
     - {fileID: 8349939387138593260}
     - {fileID: 7785595722209662894}
@@ -6555,6 +6568,8 @@ MonoBehaviour:
     ObjectsToDisable:
     - {fileID: 3431766390491916890}
     - {fileID: 1000341760}
+    - {fileID: 336521827}
+    - {fileID: 1742048056}
     - {fileID: 8349939387138593260}
     - {fileID: 7785595722209662894}
     - {fileID: 3371396690041306122}
@@ -7781,6 +7796,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9166527662542578210, guid: cf69cb14ab6d4c84d94c047685d56526, type: 3}
   m_PrefabInstance: {fileID: 1720659163}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1742048056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9166527662542578221, guid: cf69cb14ab6d4c84d94c047685d56526, type: 3}
+  m_PrefabInstance: {fileID: 9166527661651282250}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1768295579 stripped
 GameObject:
@@ -9294,7 +9314,7 @@ MonoBehaviour:
     CanControlPlayer: 0
     AlwaysVisible: 1
     IsMainLevel: 0
-  ZoomCamera: {fileID: 0}
+  ZoomCamera: {fileID: 159219696}
   MinCameraSize: 0.5
   ScrollAmount:
     serializedVersion: 2
@@ -9347,11 +9367,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ScrollSmoothing: 0.97
-  TargetSizeDelay: 0.47
+  ScrollFactor: 0.4
+  ScrollSmoothing: 0.939
+  TargetSizeDelay: 0.603
   CenteringSpeed: 0.0206
   PanBoundsWidthHeight: {x: 23.5, y: 15.33}
-  AlphaSpeed: 0.032
+  AlphaSpeed: 0.082
   ZoomPanSpeed: 0.057
   SizeToPitch:
     serializedVersion: 2
@@ -15957,7 +15978,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8441596635814312121, guid: eeb2eb1c0455b4a4fb52d806aa76698e, type: 3}
       propertyPath: m_Name
-      value: ActionCircuit
+      value: FlagActionCircuit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8441596635814312121, guid: eeb2eb1c0455b4a4fb52d806aa76698e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eeb2eb1c0455b4a4fb52d806aa76698e, type: 3}
@@ -31411,7 +31436,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9166527662542578221, guid: cf69cb14ab6d4c84d94c047685d56526, type: 3}
       propertyPath: m_Name
-      value: ActionCode
+      value: FlagActionCode
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166527662542578221, guid: cf69cb14ab6d4c84d94c047685d56526, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf69cb14ab6d4c84d94c047685d56526, type: 3}

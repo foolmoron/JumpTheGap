@@ -40,6 +40,8 @@ public class ZoomManager : Manager<ZoomManager> {
     Vector2 prevMouse;
 
     public AnimationCurve SizeToPitch;
+    float scrollDir;
+    float scrollWait;
 
     void Awake() {
         ZoomCamera = ZoomCamera == null ? Camera.main : ZoomCamera;
@@ -47,8 +49,18 @@ public class ZoomManager : Manager<ZoomManager> {
     }
 
     void Update() {
-        var scrollDir = Input.mouseScrollDelta.y == 0 ? 0 : Mathf.Sign(Input.mouseScrollDelta.y);
-        Debug.Log($"{Input.mouseScrollDelta.y} / {scrollDir}");
+        if (Input.mouseScrollDelta.y != 0) {
+            scrollDir = Mathf.Sign(Input.mouseScrollDelta.y);
+            scrollWait = 0;
+        } else {
+            scrollWait += Time.deltaTime;
+            if (scrollWait > 0.1f) {
+                scrollDir = 0;
+            }
+        }
+    }
+
+    void FixedUpdate() {
         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // Zoom camera
         {
